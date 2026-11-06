@@ -1,16 +1,24 @@
 #include "Game/Game.hpp"
 
+#include <iostream>
+
 int main() {
     
-    Game snakeGame;
-    snakeGame.initialize();
+    try {
+        Game snakeGame;
+        snakeGame.initialize();
 
-    while (snakeGame.IsRunning()) {
-        snakeGame.update();
-        snakeGame.render();
+        while (snakeGame.IsRunning()) {
+            snakeGame.update();
+            snakeGame.render();
+        }
+
+        snakeGame.shutdown();
+
+    } catch (const std::exception& e) {
+        std::cerr << "An error occurred: " << e.what() << std::endl;
+        return -1;
     }
-
-    snakeGame.shutdown();
 
     return 0;
 }

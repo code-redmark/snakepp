@@ -1,18 +1,16 @@
 #pragma once
 
-#include "../utils.hpp"
-
 #include <glad/gl.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
 
-#include <iostream>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 constexpr float rectVertices[] = {
-    -0.5f, -0.5f, 0.0f,
-     0.5f, -0.5f, 0.0f,
-     0.5f,  0.5f, 0.0f,
-    -0.5f,  0.5f, 0.0f
+    -0.5f, -0.5f,
+     0.5f, -0.5f,
+     0.5f,  0.5f,
+    -0.5f,  0.5f
 };
 
 constexpr unsigned int rectIndices[] = {
@@ -22,7 +20,7 @@ constexpr unsigned int rectIndices[] = {
 
 constexpr const char* vertexShaderSource = R"(
 #version 460 core
-layout (location = 0) in vec3 aPos;
+layout (location = 0) in vec2 aPos;
 
 uniform mat4 uModel;
 uniform vec4 uColor;
@@ -30,7 +28,7 @@ uniform vec4 uColor;
 out vec4 vertexColor;
 
 void main() {
-    gl_Position = uModel * vec4(aPos, 1.0);
+    gl_Position = uModel * vec4(aPos, 0.0, 1.0);
     vertexColor = uColor;
 }
 
@@ -51,23 +49,25 @@ void main() {
 class Renderer {
 
 private:
-    glm::vec4 bgColor = glm::vec4(0.0f, 0.5f, 0.0f, 1.0f);
     GLFWwindow *window;
+    glm::vec2 windowSize;
+
+    glm::vec4 bgColor = glm::vec4(0.0f, 0.5f, 0.0f, 1.0f);
 
     GLuint VAO, VBO, EBO;
     GLuint shaderProgram;
-
-    //drawRectangle(glm::vec2 position, glm::vec2 size, glm::vec4 color);
+    
+    void drawRectangle(glm::vec2 position, glm::vec2 size, glm::vec4 color);
 
     void initializeWindow();
-    //void setupOpenGL();
-
-    //GLuint createGeometry();
-    //GLuint createShaderProgram(const char* vertexShaderSource, const char* fragmentShaderSource);
-
+    void setupOpenGL();
+    
+    // Creates a VAO, VBO, and EBO for a rectangle and sets up the vertex attributes
+    void createGeometry();
+    void createShaderProgram(const char* vertexShaderSource, const char* fragmentShaderSource);
 
 public:
     bool render();
 
-    void initialize();
+    void initialize(uint32_t width, uint32_t height);
 };

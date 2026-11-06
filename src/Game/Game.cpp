@@ -3,7 +3,7 @@
 Game::Game() : isRunning(true) {}
 
 void Game::initialize() {
-    renderer.initialize();
+    renderer.initialize(800.f, 600.f);
     isRunning = true;
 }
 
